@@ -15,14 +15,16 @@ class MainActivity : AppCompatActivity() {
     val TAG = "giangtd"
     val listA: MutableLiveData<List<Int>> = MutableLiveData()
     val listB: MutableLiveData<List<String>> = MutableLiveData()
+
     val list = ArrayList<Orange>()
+
     val _listA: ArrayList<Int> = ArrayList<Int>()
     val _listB: ArrayList<String> = ArrayList<String>()
 
     val _listACopy: ArrayList<Int> = ArrayList<Int>()
     val _listBCopy: ArrayList<String> = ArrayList<String>()
 
-    val listTotal = ArrayList<Orange>()
+//    val listTotal = ArrayList<Orange>()
 
     init {
         _listA.add(1)
@@ -40,26 +42,27 @@ class MainActivity : AppCompatActivity() {
 
     val mediatorObserver = Observer<List<Orange>> {
 
-        for (item in it) {
+        for (item in list) {
             Log.d(TAG, "Orange id : " + item.id + " name : " + item.name)
         }
-        Log.d(TAG, "size : " + it.size)
+        Log.d(TAG, "size : " + list.size)
     }
 
-    private fun mergeList(){
+    private fun mergeList() {
         list.clear()
         _listACopy.forEach {
             list.add(Orange(it, "${it}"))
         }
+        var index = 1
         _listBCopy.forEach {
-            list.add(Orange(1, it))
+            list.add(Orange(index, it))
+            index++
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
 
         val mediatorLiveData = MediatorLiveData<MutableList<Orange>>()
 
@@ -85,12 +88,11 @@ class MainActivity : AppCompatActivity() {
         btn_add.setOnClickListener(View.OnClickListener {
             _listA.add(9)
             listA.postValue(_listA)
-
         })
 
         btn_delete.setOnClickListener(View.OnClickListener {
-            listTotal.removeAt(0)
-            mediatorLiveData.postValue(listTotal)
+            _listB.removeAt(0)
+            listB.postValue(_listB)
         })
     }
 }
